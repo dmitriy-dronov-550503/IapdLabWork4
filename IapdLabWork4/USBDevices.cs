@@ -38,7 +38,7 @@ namespace IapdLabWork4
             }
         }
 
-        public List<USBDevice> getDevices()
+        public List<USBDevice> GetDevices()
         {
             return devices;
         }

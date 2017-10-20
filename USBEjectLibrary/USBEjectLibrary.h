@@ -6,12 +6,14 @@
 #include <winioctl.h>
 #include <tchar.h>
 #include <stdio.h>
+#include <iostream>
+using namespace std;
 using namespace System;
 
 namespace USBEjectLibrary {
 		public ref class EjectClass
 		{
-		public:
+		private:
 			static void ReportError(LPTSTR szMsg);
 
 			static HANDLE OpenVolume(TCHAR cDriveLetter);
@@ -26,9 +28,9 @@ namespace USBEjectLibrary {
 
 			static BOOL AutoEjectVolume(HANDLE hVolume);
 
-			static BOOL EjectVolume(TCHAR cDriveLetter);
-
-			static void EjectUSBDrive(TCHAR driveLetter);
+			static string EjectVolume(TCHAR cDriveLetter);
+		public:
+			static String^ EjectUSBDrive(TCHAR driveLetter);
 		};
 	
 	

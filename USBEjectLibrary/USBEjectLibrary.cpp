@@ -35,7 +35,7 @@ namespace USBEjectLibrary {
 				dwAccessFlags = GENERIC_READ;
 				break;
 			default:
-				_tprintf(TEXT("Cannot eject.  Drive type is incorrect.\n"));
+				_tprintf(L"Cannot eject.  Drive type is incorrect.");
 				return INVALID_HANDLE_VALUE;
 			}
 
@@ -62,8 +62,8 @@ namespace USBEjectLibrary {
 			return CloseHandle(hVolume);
 		}
 
-#define LOCK_TIMEOUT        10000       // 10 Seconds
-#define LOCK_RETRIES        20
+		#define LOCK_TIMEOUT        10000       // 10 Seconds
+		#define LOCK_RETRIES        20
 
 		BOOL EjectClass::LockVolume(HANDLE hVolume)
 		{
@@ -128,7 +128,7 @@ namespace USBEjectLibrary {
 				NULL);
 		}
 
-		BOOL EjectClass::EjectVolume(TCHAR cDriveLetter)
+		string EjectClass::EjectVolume(TCHAR cDriveLetter)
 		{
 			HANDLE hVolume;
 
@@ -138,7 +138,7 @@ namespace USBEjectLibrary {
 			// Open the volume.
 			hVolume = OpenVolume(cDriveLetter);
 			if (hVolume == INVALID_HANDLE_VALUE)
-				return FALSE;
+				return "Can't open volume";
 
 			// Lock and dismount the volume.
 			if (LockVolume(hVolume) && DismountVolume(hVolume)) {
@@ -152,25 +152,33 @@ namespace USBEjectLibrary {
 
 			// Close the volume so other processes can use the drive.
 			if (!CloseVolume(hVolume))
-				return FALSE;
+				return "Can't close volume";
 
-			if (fAutoEject)
-				printf("Media in Drive %c has been ejected safely.\n",
-					cDriveLetter);
+			if (fAutoEject) {
+				string res = "OK. Media in Drive ";
+				res += cDriveLetter;
+				return  res+":\\ has been ejected safely.";
+			}
 			else {
-				if (fRemoveSafely)
-					printf("Media in Drive %c can be safely removed.\n",
-						cDriveLetter);
+				if (fRemoveSafely) {
+					string res = "OK. Media in Drive ";
+					res += cDriveLetter;
+					return  res + ":\\ can be safely removed.";
+				}
 			}
 
-			return TRUE;
+			return "OK";
 		}
 
-		void EjectClass::EjectUSBDrive(TCHAR driveLetter) {
-			if (!EjectVolume(driveLetter))
-				printf("Failure ejecting drive %c.\n", driveLetter);
-
-			return;
+		String^ EjectClass::EjectUSBDrive(TCHAR driveLetter) {
+			string res = EjectVolume(driveLetter);
+			string ret = res;
+			if (res.find("OK")==string::npos) {
+				ret = "Failure ejecting drive ";
+				ret += driveLetter;
+				ret += '\n' + res;
+			}
+			return gcnew String(ret.c_str());
 		}
 	
 }
