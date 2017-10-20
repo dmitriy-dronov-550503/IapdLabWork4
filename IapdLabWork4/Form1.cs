@@ -37,42 +37,6 @@ namespace IapdLabWork4
             base.WndProc(ref m);
         }
 
-        /*
-        protected override void WndProc(ref Message m)
-        {
-            base.WndProc(ref m);
-
-            switch (m.Msg)
-            {
-                case WM_DEVICECHANGE:
-                    switch ((int)m.WParam)
-                    {
-                        case DBT_DEVICEARRIVAL:
-                            dataGridView1.Rows.Add("New Device Arrived");
-
-                            int devType = Marshal.ReadInt32(m.LParam, 4);
-                            if (devType == DBT_DEVTYP_VOLUME)
-                            {
-                                DevBroadcastVolume vol;
-                                vol = (DevBroadcastVolume)
-                                   Marshal.PtrToStructure(m.LParam,
-                                   typeof(DevBroadcastVolume));
-                                dataGridView1.Rows.Add("Mask is " + vol.Mask);
-                            }
-
-                            break;
-
-                        case DBT_DEVICEREMOVECOMPLETE:
-                            dataGridView1.Rows.Add("Device Removed");
-                            break;
-
-                    }
-                    checkBox1.Checked = !checkBox1.Checked;
-                    break;
-            }
-
-        }*/
-
         private void RefreshData()
         {
             List<int> checkedRows = new List<int>();
