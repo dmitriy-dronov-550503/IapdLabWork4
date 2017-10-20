@@ -81,5 +81,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\USBEjectLibrary\USBEjectLibrary.vcxproj">
+      <Project>{7df97e92-dc29-478e-a476-3b8cdf57a8c9}</Project>
+      <Name>USBEjectLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

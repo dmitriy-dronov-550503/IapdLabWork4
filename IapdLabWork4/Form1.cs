@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using USBEjectLibrary;
 
 namespace IapdLabWork4
 {
@@ -95,7 +96,7 @@ namespace IapdLabWork4
 
         private void button1_Click(object sender, EventArgs e)
         {
-            RefreshData();
+            EjectClass.EjectUSBDrive('E');
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
