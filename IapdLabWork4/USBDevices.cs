@@ -31,7 +31,7 @@ namespace IapdLabWork4
                     }
                     catch (Exception e)
                     {
-                        //System.Windows.Forms.MessageBox.Show("Not all data was readed");
+                        System.Windows.Forms.MessageBox.Show("Can't read data from drive");
                     }
                     devices.Add(device);
                 }
