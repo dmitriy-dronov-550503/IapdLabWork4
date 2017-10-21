@@ -15,6 +15,7 @@ namespace IapdLabWork4
     public partial class Form1 : Form
     {
         USBDevices usbDevices;
+        bool backgroundWorkerResult = false;
         private const int WM_DEVICECHANGE = 0x219;
 
         public Form1()
@@ -64,23 +65,19 @@ namespace IapdLabWork4
 
             foreach (var i in checkedRows)
             {
-                dataGridView1.Rows[i].Cells[6].Value = true;
+                try
+                {
+                    dataGridView1.Rows[i].Cells[6].Value = true;
+                }
+                catch (Exception ex) { }
             }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             timer1.Stop();
-            foreach(DataGridViewRow row in dataGridView1.Rows)
-            {
-                if((bool)row.Cells[6].Value)
-                {
-                    MessageBox.Show(EjectClass.EjectUSBDrive(((string)row.Cells[0].Value).First()));
-                    dataGridView1.Rows.Remove(row);
-                    progressBar1.Value = 0;
-                }
-            }
-            timer1.Start();
+            progressBar2.Visible = true;
+            backgroundWorker1.RunWorkerAsync();
         }
         
         private void timer1_Tick(object sender, EventArgs e)
@@ -94,6 +91,30 @@ namespace IapdLabWork4
             progressBar1.Value = (int)(device.FreeSpace*100/device.Size);
             if (dataGridView1.CurrentCell.ColumnIndex == 6)
                 dataGridView1.CurrentRow.Cells[Column7.Name].Value = !(bool)dataGridView1.CurrentRow.Cells[Column7.Name].Value;
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if ((bool)row.Cells[6].Value)
+                {
+                    string res = EjectClass.EjectUSBDrive(((string)row.Cells[0].Value).First());
+                    MessageBox.Show(res);
+                    backgroundWorkerResult = res.Contains("OK");
+                }
+            }
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (backgroundWorkerResult)
+            {
+                RefreshData();
+                progressBar1.Value = 0;
+            }
+            progressBar2.Visible = false;
+            timer1.Start();
         }
     }
 }

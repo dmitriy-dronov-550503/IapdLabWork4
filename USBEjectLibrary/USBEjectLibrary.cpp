@@ -167,7 +167,7 @@ namespace USBEjectLibrary {
 				}
 			}
 
-			return "OK";
+			return "Probably device is using now";
 		}
 
 		String^ EjectClass::EjectUSBDrive(TCHAR driveLetter) {
